@@ -1,19 +1,35 @@
-#include <iostream>
-using namespace std;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-int main()
-{
-    int a = 5, b = 10, temp;
+public class Test {
+    public static void main(String[] args) {
+        String host = "localhost"; // Server's hostname
+        int port = 12345;          // Server's port
 
-    cout << "Before swapping." << endl;
-    cout << "a = " << a << ", b = " << b << endl;
+        try (Socket socket = new Socket(host, port)) {
+            System.out.println("Connected to the server.");
 
-    temp = a;
-    a = b;
-    b = temp;
+            // Set up input and output streams
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-    cout << "\nAfter swapping the code ." << endl;
-    cout << "a = " << a << ", b = " << b << endl;
-// here  i  am cheanging my code frome here 
-    return 0;
+            // Send "hi" message to the server
+            String message = "hi";
+            String date = "22/11/24";
+            out.println(message);
+            out.println(date);
+            System.out.println("Client sent: " + message);
+            System.out.println("Client Date: "+ date);
+
+            // Receive response from the server
+            String response = in.readLine();
+            System.out.println("Server responded: " + response);
+
+        } catch (IOException e) {
+            System.err.println("Client error: " + e.getMessage());
+        }
+    }
 }
